@@ -2,7 +2,7 @@
 
 Site web statique (HTML/CSS) pour une association, réalisé dans le cadre d'un travail pratique sur Git. Il sert à mettre en pratique la gestion de versions avec Git et GitHub : branches, commits, Pull Requests.
 
-## Prérequis
+## Prérequiss
 
 - Un navigateur web récent (Chrome, Firefox, Edge, Safari)
 - Git pour récupérer le projet et suivre ses modifications
