@@ -1,5 +1,9 @@
 name: Verification
-on: [push]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 jobs:
   controle:
     runs-on: ubuntu-latest
