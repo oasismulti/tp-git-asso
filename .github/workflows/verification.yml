@@ -1,0 +1,13 @@
+name: Verification
+on: [push]
+jobs:
+  controle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: La page existe
+        run: test -f index.html
+      - name: La balise fermante est la
+        run: grep -q "</body>" index.html
+      - name: La feuille de style est liee
+        run: grep -q 'href="style.css"' index.html
