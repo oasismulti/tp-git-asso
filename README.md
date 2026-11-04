@@ -1,10 +1,11 @@
 # TP Git Association
 
 > ## 📘 TD GitHub Actions en binôme — rendu
-> **Binôme :** Sofiane (A) · Valentin Cano (B) — valentincano0904@orange.fr
+> **Binôme :** Sofiane (A, `oasismulti`) · Valentin Cano (B, `valcno`) — valentincano0904@orange.fr
 >
 > | Livrable | Lien |
 > |---|---|
+> | 🌐 **Site en ligne (GitHub Pages)** | https://oasismulti.github.io/tp-git-asso/ |
 > | 📄 **Compte rendu PDF** (captures + explications + questions 1 et 2) | [docs/Compte-rendu-TD-GitHub-Actions.pdf](docs/Compte-rendu-TD-GitHub-Actions.pdf) |
 > | 📝 Compte rendu en ligne | [docs/compte-rendu.md](docs/compte-rendu.md) |
 > | ✅ Workflow de vérification | [.github/workflows/verification.yml](.github/workflows/verification.yml) |

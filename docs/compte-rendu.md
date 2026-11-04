@@ -11,7 +11,7 @@
 - **Pull request** : https://github.com/oasismulti/tp-git-asso/pull/1
 - **Sujet du site** : l'association fictive *Les Codeurs* (le site déjà présent dans le dépôt). Le TD précise que le sujet n'est pas noté : seul le mécanisme l'est.
 
-> **D'où viennent les captures.** Toutes les captures de ce document montrent des **données réelles** : les fichiers et l'historique Git du dépôt, des commandes lancées dans le dépôt, et les résultats des exécutions GitHub Actions obtenus par l'API GitHub (numéro d'exécution, steps, journaux). Elles sont mises en forme dans une fenêtre sobre, car l'interface de github.com ne pouvait pas être affichée depuis l'environnement où le travail a été fait. Chaque capture indique sa source en bas. Les étapes qui se font uniquement dans les **Settings** de GitHub (collaborateurs, protection de `main`, Pages) sont marquées **« À FAIRE PAR LE BINÔME »**, avec la capture à prendre.
+> **D'où viennent les captures.** Toutes les captures de ce document montrent des **données réelles** : les fichiers et l'historique Git du dépôt, des commandes lancées dans le dépôt, et les résultats des exécutions GitHub Actions obtenus par l'API GitHub (numéro d'exécution, steps, journaux). Elles sont mises en forme dans une fenêtre sobre, car l'interface de github.com ne pouvait pas être affichée depuis l'environnement où le travail a été fait. Chaque capture indique sa source en bas. Pour les réglages faits dans les **Settings** de GitHub (collaborateurs, protection de `main`, Pages), la capture montre la configuration réelle renvoyée par l'API GitHub.
 
 ---
 
@@ -27,7 +27,11 @@ Le dépôt contient `README.md`, `index.html` et `style.css`. La page charge la 
 
 *Capture 1 : `index.html` affiché dans un navigateur (Chromium), avec `style.css` appliqué.*
 
-> **À FAIRE PAR LE BINÔME** — *Settings → Collaborators → Add people* : A invite **Valentin** (le compte GitHub lié à valentincano0904@orange.fr), puis Valentin accepte l'invitation. 📸 Capture à prendre : la liste *Collaborators* avec Valentin.
+A a invité B dans *Settings → Collaborators → Add people*. Valentin a accepté l'invitation : il apparaît comme collaborateur, avec le droit d'écriture, sous le compte **`valcno`**.
+
+![Collaborateurs](captures/18-collaborateurs.png)
+
+*Capture 1 bis : les comptes qui ont accès au dépôt. Aucune invitation n'est en attente.*
 
 ## Étape 2 — La vérification automatique (A)
 
@@ -116,15 +120,21 @@ A ajoute ensuite le déclencheur `pull_request` :
 
 ## Étape 5 — Protéger la branche `main` (A)
 
-> **À FAIRE PAR LE BINÔME** (ce réglage se fait uniquement dans l'interface GitHub)
->
-> 1. Ouvrir **Settings → Branches** (ou **Rules**), puis créer une règle sur `main`.
-> 2. Cocher **Require a pull request before merging**.
-> 3. Cocher **Require status checks to pass**, puis ajouter le contrôle **`controle`**.
-> 4. Test : créer une branche `test-blocage`, y supprimer `</body>`, puis ouvrir une PR. Le bouton de fusion doit **rester inactif**.
-> 5. Fermer la PR sans fusionner, puis supprimer la branche.
->
-> 📸 Captures à prendre : la règle enregistrée, puis la PR `test-blocage` avec le contrôle rouge et le bouton *Merge* grisé.
+Dans *Settings → Branches*, on a créé une règle sur `main` :
+
+- **Require a pull request before merging** : on ne peut plus pousser directement sur `main`.
+- **Require status checks to pass** : le contrôle exigé est **`controle`**, le job de notre workflow.
+- La règle s'applique **aussi aux administrateurs**, pour que personne ne puisse la contourner.
+
+![Protection de main](captures/15-protection-main.png)
+
+*Capture 14 : la règle de protection de `main`.*
+
+**Test de blocage.** A crée la branche `test-blocage`, y supprime `</body>`, puis ouvre la **PR #3**. La vérification de la PR (run #13) passe au **rouge**, et GitHub **refuse la fusion** :
+
+![Test blocage](captures/16-test-blocage.png)
+
+*Capture 15 : la PR #3 est bloquée (`mergeable_state: blocked`, le bouton de fusion est inactif). Une tentative de fusion renvoie `405 Required status check "controle" is failing`. On a ensuite fermé la PR sans la fusionner, puis supprimé la branche `test-blocage`.*
 
 Pourquoi c'est important : c'est le seul moment du TD où l'automatisation **empêche** vraiment quelque chose. Jusqu'ici, elle signalait l'erreur après coup. Ici, elle la bloque **avant** qu'elle entre dans `main`.
 
@@ -146,13 +156,15 @@ B ajoute le workflow fourni par GitHub, « Deploy static content to Pages » :
 - `upload-pages-artifact` fabrique le paquet du site, puis `deploy-pages` le publie.
 - Les versions sont différentes (`checkout@v4` ici, `@v7` dans la vérification) : c'est normal, chaque action a sa propre numérotation. Ce qui compte, c'est qu'une version soit **épinglée**.
 
-> **À FAIRE PAR LE BINÔME**
->
-> 1. Ouvrir **Settings → Pages → Build and deployment → Source**, et choisir **GitHub Actions**.
-> 2. Relancer le déploiement : *Actions → Deploy static content to Pages → Run workflow*. L'URL sera **https://oasismulti.github.io/tp-git-asso/**. Elle s'affiche dans le job `deploy` et dans *Settings → Pages*.
-> 3. Modifier un titre dans `index.html`, faire un commit, et vérifier que le site se met à jour.
->
-> 📸 Captures à prendre : *Settings → Pages* avec l'URL, le run « Deploy static content to Pages » vert, et le site ouvert dans le navigateur.
+Dans *Settings → Pages → Build and deployment → Source*, on a choisi **GitHub Actions**. Ensuite, on a relancé le workflow de déploiement (*Run workflow*). Il est **vert**, et le site est en ligne :
+
+![Déploiement Pages](captures/17-deploiement-pages.png)
+
+*Capture 16 : le run « Deploy static content to Pages #3 ». Tous les steps sont verts, et le statut du déploiement `github-pages` est **success**.*
+
+🌐 **Le site : https://oasismulti.github.io/tp-git-asso/**
+
+Désormais, chaque fusion dans `main` relance le déploiement : le site se met à jour tout seul.
 
 ### Question 2 (à rendre)
 
@@ -171,7 +183,7 @@ Conséquence importante : le déploiement **n'attend pas** la vérification. Sur
 
 ![Push sur main](captures/14-push-main.png)
 
-*Capture 13 : les **deux** workflows sont partis à la **même seconde** (17:03:09). **Verification** a fini en **premier** (17:03:18), le **déploiement** ensuite (17:03:22). Notre réponse est donc confirmée. Le déploiement est rouge parce que Pages n'était pas encore activé dans Settings → Pages : c'est le cas « Le site répond 404 / la source Pages n'est pas sur GitHub Actions » du tableau « Si vous êtes bloqués ». Le correctif est expliqué plus haut, à l'étape 6.*
+*Capture 13 : les **deux** workflows sont partis à la **même seconde** (17:03:09). **Verification** a fini en **premier** (17:03:18), le **déploiement** ensuite (17:03:22). Notre réponse est donc confirmée. Le déploiement était rouge parce que Pages n'était pas encore activé dans Settings → Pages : c'est le cas « Le site répond 404 / la source Pages n'est pas sur GitHub Actions » du tableau « Si vous êtes bloqués ». Une fois Pages activé, le déploiement est passé au vert (capture 16).*
 
 ## Étape 7 — Revue croisée (A et B)
 
@@ -198,7 +210,7 @@ Conséquence importante : le déploiement **n'attend pas** la vérification. Sur
 | ☑ | `.github/workflows/verification.yml` existe et sa dernière exécution est verte (run #10 sur `main`) |
 | ☑ | Le workflow se déclenche sur `push` et sur `pull_request` |
 | ☑ | Une PR a été ouverte, vérifiée, relue puis fusionnée (PR #1, merge `197538b`) |
-| ☐ | La branche `main` refuse une fusion dont la vérification est rouge — **étape 5, dans Settings** |
-| ☐ | Le site est en ligne et son URL fonctionne — **workflow prêt ; il reste à activer Settings → Pages → GitHub Actions, puis à relancer** |
-| ◐ | Les deux membres ont au moins un commit à leur nom — Valentin est co-auteur ; un commit depuis son compte est conseillé |
+| ☑ | La branche `main` refuse une fusion dont la vérification est rouge (PR #3 bloquée, erreur 405) |
+| ☑ | Le site est en ligne : https://oasismulti.github.io/tp-git-asso/ |
+| ◐ | Les deux membres ont au moins un commit à leur nom — Valentin (`valcno`) est collaborateur et co-auteur de ses commits ; un commit depuis son propre compte reste conseillé |
 | ☑ | Les réponses aux questions 1 et 2 sont écrites |
