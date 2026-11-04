@@ -48,3 +48,14 @@ Se placer sur la branche principale et récupérer les dernières modifications 
 git switch main
 git pull
 ```
+
+## TD GitHub Actions (binôme)
+
+| Rôle | Membre | Contact |
+|------|--------|---------|
+| A | Sofiane | — |
+| B | Valentin Cano | valentincano0904@orange.fr |
+
+- Vérification automatique : `.github/workflows/verification.yml` (job `controle`, sur `push` et `pull_request` vers `main`)
+- Déploiement : `.github/workflows/static.yml` (GitHub Pages)
+- Compte rendu avec captures et réponses aux questions : [`docs/compte-rendu.md`](docs/compte-rendu.md) — version PDF : [`docs/Compte-rendu-TD-GitHub-Actions.pdf`](docs/Compte-rendu-TD-GitHub-Actions.pdf)
