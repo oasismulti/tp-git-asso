@@ -9,8 +9,8 @@
 > | 📝 Compte rendu en ligne | [docs/compte-rendu.md](docs/compte-rendu.md) |
 > | ✅ Workflow de vérification | [.github/workflows/verification.yml](.github/workflows/verification.yml) |
 > | 🚀 Workflow de déploiement Pages | [.github/workflows/static.yml](.github/workflows/static.yml) |
-> | ▶️ Exécutions GitHub Actions | [Onglet Actions](../../actions) |
-> | 🔀 Pull request du TD | [PR #1](../../pull/1) |
+> | ▶️ Exécutions GitHub Actions | [Onglet Actions](https://github.com/oasismulti/tp-git-asso/actions) |
+> | 🔀 Pull request du TD | [PR #1](https://github.com/oasismulti/tp-git-asso/pull/1) |
 > | 🖼️ Captures d'écran | [docs/captures/](docs/captures/) |
 
 Site web statique (HTML/CSS) pour une association, réalisé dans le cadre d'un travail pratique sur Git. Il sert à mettre en pratique la gestion de versions avec Git et GitHub : branches, commits, Pull Requests.
