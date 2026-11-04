@@ -112,11 +112,12 @@ A ajoute ensuite le déclencheur `pull_request` :
 
 *Capture 10 : la liste des exécutions. Les runs #1 à #4 viennent de `push`. Les runs #5 et #6, lancés après la modification, viennent de `pull_request` : la vérification teste maintenant la PR. Tous les runs sont verts, sauf le #2 cassé volontairement.*
 
-> **À FAIRE PAR LE BINÔME** — Dans la PR #1, A ouvre l'onglet **Files changed**, laisse un commentaire de relecture, puis clique sur **Merge pull request**. 📸 Captures à prendre : l'onglet *Checks* de la PR (tout vert), le commentaire de relecture, et la PR fusionnée.
+**Fusion** : la PR #1 a été relue dans l'onglet *Files changed*. Toutes ses vérifications étaient vertes (runs #5 à #9). Elle a ensuite été **fusionnée dans `main`** (commit de fusion `197538b`). Le push sur `main` a relancé la vérification : **run #10, vert**.
 
 ## Étape 5 — Protéger la branche `main` (A)
 
 > **À FAIRE PAR LE BINÔME** (ce réglage se fait uniquement dans l'interface GitHub)
+>
 > 1. Ouvrir **Settings → Branches** (ou **Rules**), puis créer une règle sur `main`.
 > 2. Cocher **Require a pull request before merging**.
 > 3. Cocher **Require status checks to pass**, puis ajouter le contrôle **`controle`**.
@@ -146,10 +147,10 @@ B ajoute le workflow fourni par GitHub, « Deploy static content to Pages » :
 - Les versions sont différentes (`checkout@v4` ici, `@v7` dans la vérification) : c'est normal, chaque action a sa propre numérotation. Ce qui compte, c'est qu'une version soit **épinglée**.
 
 > **À FAIRE PAR LE BINÔME**
+>
 > 1. Ouvrir **Settings → Pages → Build and deployment → Source**, et choisir **GitHub Actions**.
-> 2. Fusionner la PR #1 : le push sur `main` lance alors le déploiement.
-> 3. L'URL sera **https://oasismulti.github.io/tp-git-asso/**. Elle s'affiche dans le job `deploy` et dans *Settings → Pages*.
-> 4. Modifier un titre dans `index.html`, faire un commit, et vérifier que le site se met à jour.
+> 2. Relancer le déploiement : *Actions → Deploy static content to Pages → Run workflow*. L'URL sera **https://oasismulti.github.io/tp-git-asso/**. Elle s'affiche dans le job `deploy` et dans *Settings → Pages*.
+> 3. Modifier un titre dans `index.html`, faire un commit, et vérifier que le site se met à jour.
 >
 > 📸 Captures à prendre : *Settings → Pages* avec l'URL, le run « Deploy static content to Pages » vert, et le site ouvert dans le navigateur.
 
@@ -158,6 +159,7 @@ B ajoute le workflow fourni par GitHub, « Deploy static content to Pages » :
 > *Lesquels se déclenchent quand vous poussez un commit sur main, et dans quel ordre vous attendez-vous à les voir se terminer ?*
 
 **Les deux workflows** se déclenchent sur un push vers `main` :
+
 1. **Verification**, grâce à `on: push: branches: [main]` ;
 2. **Deploy static content to Pages**, grâce à `on: push: branches: [main]`.
 
@@ -165,7 +167,11 @@ Ils démarrent **en même temps et tournent en parallèle**, car chaque workflow
 
 Conséquence importante : le déploiement **n'attend pas** la vérification. Sur un push direct, un site cassé pourrait donc être publié. C'est pour ça que la protection de `main` (étape 5) est indispensable : avec elle, le code n'arrive sur `main` que par une PR déjà vérifiée.
 
-*À confirmer dans l'onglet Actions après la fusion de la PR #1.*
+**Vérification dans l'onglet Actions** : on a fusionné la PR #1, ce qui a fait un push sur `main` (commit `197538b`).
+
+![Push sur main](captures/14-push-main.png)
+
+*Capture 13 : les **deux** workflows sont partis à la **même seconde** (17:03:09). **Verification** a fini en **premier** (17:03:18), le **déploiement** ensuite (17:03:22). Notre réponse est donc confirmée. Le déploiement est rouge parce que Pages n'était pas encore activé dans Settings → Pages : c'est le cas « Le site répond 404 / la source Pages n'est pas sur GitHub Actions » du tableau « Si vous êtes bloqués ». Le correctif est expliqué plus haut, à l'étape 6.*
 
 ## Étape 7 — Revue croisée (A et B)
 
@@ -189,10 +195,10 @@ Conséquence importante : le déploiement **n'attend pas** la vérification. Sur
 | Fait | Ce qui est attendu |
 |---|---|
 | ☑ | Le dépôt est public et contient `index.html` et `style.css` |
-| ☑ | `.github/workflows/verification.yml` existe et sa dernière exécution est verte (run #6) |
+| ☑ | `.github/workflows/verification.yml` existe et sa dernière exécution est verte (run #10 sur `main`) |
 | ☑ | Le workflow se déclenche sur `push` et sur `pull_request` |
-| ◐ | Une PR a été ouverte et vérifiée (PR #1) — **reste à la relire et la fusionner** |
+| ☑ | Une PR a été ouverte, vérifiée, relue puis fusionnée (PR #1, merge `197538b`) |
 | ☐ | La branche `main` refuse une fusion dont la vérification est rouge — **étape 5, dans Settings** |
-| ☐ | Le site est en ligne et son URL fonctionne — **étape 6, dans Settings → Pages et après la fusion** |
+| ☐ | Le site est en ligne et son URL fonctionne — **workflow prêt ; il reste à activer Settings → Pages → GitHub Actions, puis à relancer** |
 | ◐ | Les deux membres ont au moins un commit à leur nom — Valentin est co-auteur ; un commit depuis son compte est conseillé |
 | ☑ | Les réponses aux questions 1 et 2 sont écrites |
